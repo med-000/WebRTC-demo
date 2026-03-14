@@ -1,14 +1,18 @@
-const ws = new WebSocket("ws://localhost:8080/ws");
+const ws = new WebSocket(`ws://localhost:8080/room/${id}`);
 //websocketサーバーがこのURLだよっていってるだけであって作っているわけじゃない。作っているのは接続のみ
 
 ws.onopen = () => {
   console.log("ws connected");
 
-  const payload = {
-    message: "hello",
+  const signalMessage = {
+    type: "",
+    sdp: "",
+    candidate: "",
+    sdpMid: "",
+    sdpMLineIndex: 0,
   };
 
-  ws.send(JSON.stringify(payload));
+  ws.send(JSON.stringify(signalMessage));
 };
 
 ws.onmessage = (event) => {
@@ -17,5 +21,5 @@ ws.onmessage = (event) => {
 };
 
 ws.onclose = () => {
-  console.log("closed");
+  console.log("ws closed");
 };

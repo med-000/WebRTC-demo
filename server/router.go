@@ -5,7 +5,9 @@ import (
 )
 
 func Start() {
-	http.HandleFunc("/ws",WsHandler)
+	http.HandleFunc("/room/",WsHandler)
+	http.HandleFunc("/create",CreateRoom)
+	http.HandleFunc("/join",JoinRoom)
 
 	http.ListenAndServe(":8080", nil)
 }

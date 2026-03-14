@@ -1,9 +1,10 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/websocket"
 )
@@ -16,17 +17,24 @@ var upgrader = websocket.Upgrader{
 
 
 func WsHandler(w http.ResponseWriter, r *http.Request) {
+
+	room := r.URL.Path[len("/room/"):]
+
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		return
 	}
 
 	fmt.Println("client connected")
+
 	client := &Client{
 		Conn: conn,
+		Room: room,
 	}
 
-	fmt.Println("client connected")
+	rooms[room] = append(rooms[room], client)
+
+	fmt.Println("joined room:",room)
 
 	for {
 		_, msg, err := conn.ReadMessage()
@@ -34,33 +42,37 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		var m Message
-		json.Unmarshal(msg, &m)
+		for _, c := range rooms[room] {
+			if c.Conn != conn {
 
-		switch m.Type {
-
-		case "join":
-
-			client.Room = m.Room
-
-			rooms[m.Room] = append(rooms[m.Room], client)
-
-			fmt.Println("client joined room:", m.Room)
-
-		case "offer", "answer", "ice":
-
-			fmt.Println("relay message:", m.Type)
-
-			for _, c := range rooms[m.Room] {
-
-				if c.Conn != conn {
-
-					c.Conn.WriteMessage(websocket.TextMessage, msg)
-
-				}
+				c.Conn.WriteMessage(websocket.TextMessage, msg)
 
 			}
-
 		}
+
+		
 	}
+}
+
+func CreateRoom(w http.ResponseWriter, r *http.Request) {
+	n := rand.Intn(1000)
+	
+	url := fmt.Sprintf("/room/%d", n)
+
+	http.Redirect(w, r, url, http.StatusFound)
+}
+
+func JoinRoom(w http.ResponseWriter, r *http.Request) {
+
+	roomIdStr := r.FormValue("roomId")
+
+	roomId, err := strconv.Atoi(roomIdStr)
+	if err != nil {
+		http.Error(w, "invalid room id", http.StatusBadRequest)
+		return
+	}
+
+	url := fmt.Sprintf("/room/%d", roomId)
+
+	http.Redirect(w, r, url, http.StatusFound)
 }
