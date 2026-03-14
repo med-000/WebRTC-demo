@@ -1,5 +1,7 @@
 package server
 
+import "github.com/gorilla/websocket"
+
 type (
 
 Signal struct {
@@ -13,5 +15,14 @@ Signal struct {
 	SdpMid string `json:"sdpMid,omitempty"`
 	SdpMLineIndex int `json:"sdpMLineIndex,omitempty"`
 }
+Message struct {
+	Type string `json:"type"`
+	Room string `json:"room"`
+	Data string `json:"data,omitempty"`
+}
 
+Client struct {
+	Conn *websocket.Conn
+	Room string
+}
 )

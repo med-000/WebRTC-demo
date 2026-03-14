@@ -1,4 +1,5 @@
 const ws = new WebSocket("ws://localhost:8080/ws");
+//websocketサーバーがこのURLだよっていってるだけであって作っているわけじゃない。作っているのは接続のみ
 
 ws.onopen = () => {
   console.log("ws connected");
