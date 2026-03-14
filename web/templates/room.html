@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebRTC Room</title>
+  </head>
+
+  <body>
+    <h1>WebRTC Chat</h1>
+    <h2>{{.Title}}</h2>
+
+    <div>
+      <input id="message" placeholder="message" />
+      <button onclick="sendMessage()">send</button>
+    </div>
+
+    <textarea id="history" rows="10" cols="60" readonly></textarea>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

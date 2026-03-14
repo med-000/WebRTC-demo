@@ -15,6 +15,9 @@ let peerConnection;
 // Data Channel
 let dataChannel;
 
+//websocket
+const ws = new WebSocket(`ws://localhost:8080/room/${id}`);
+
 // ページ読み込み時に呼び出す関数
 window.onload = function () {
   document.getElementById("status").value = "closed";

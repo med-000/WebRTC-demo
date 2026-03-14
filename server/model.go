@@ -17,4 +17,8 @@ Client struct {
 	Conn *websocket.Conn
 	Room string
 }
+
+HTMLtemplate struct {
+	Title string
+}
 )

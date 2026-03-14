@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebRTC Demo</title>
+  </head>
+
+  <body>
+    <h1>WebRTC Demo</h1>
+
+    <h2>Create Room</h2>
+    <form action="/create" method="post">
+      <button type="submit">Create</button>
+    </form>
+
+    <h2>Join Room</h2>
+    <form action="/join" method="post">
+      <input type="text" name="roomId" placeholder="room id" />
+      <button type="submit">Join</button>
+    </form>
+  </body>
+</html>
